@@ -349,10 +349,14 @@ with tab1:
         data = input_data.iloc[0].to_dict()
 
         # Send data to FastAPI backend
-        response = requests.post("http://127.0.0.1:8000/predict", json=data)
+        response = requests.post("https://studentdetails-2-gdiv.onrender.com/predict", json=data)
 
         # Get response from backend
-        result = response.json()
+        try:
+            result = response.json()
+        except requests.exceptions.JSONDecodeError:
+            st.error(f"Backend returned a non-JSON response (status {response.status_code}). It may be waking up — try again in a few seconds.\n\nRaw: {response.text[:300]}")
+            st.stop()
         print("Result of the predict response", result)
 
         # Check if the backend sent back an error instead of a prediction
@@ -426,8 +430,12 @@ with tab2:
 
         if set(expected_columns).issubset(input_data.columns):
             data = input_data[expected_columns].to_dict(orient="records")
-            response = requests.post("http://127.0.0.1:8000/predict-bulk", json=data)
-            result = response.json()
+            response = requests.post("https://studentdetails-2-gdiv.onrender.com/predict-bulk", json=data)
+            try:
+                result = response.json()
+            except requests.exceptions.JSONDecodeError:
+                st.error(f"Backend returned a non-JSON response (status {response.status_code}). It may be waking up — try again in a few seconds.\n\nRaw: {response.text[:300]}")
+                st.stop()
             prediction_data = pd.DataFrame(result)
             st.subheader("Predictions:")
             st.write(prediction_data)
@@ -472,4 +480,4 @@ with tab3:
     fig.update_layout(plot_bgcolor='black', paper_bgcolor='black', font=dict(color='white', style='italic', size=14), title_font=dict(color='white', size=22), xaxis=dict(showgrid=False, color='white', linecolor='white'), yaxis=dict(showgrid=True, gridcolor='rgba(255,255,255,0.15)', color='white', linecolor='white'), margin=dict(t=60, b=40))
 
     # Display the Plotly chart in Streamlit
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
