@@ -352,7 +352,12 @@ with tab1:
         response = requests.post("https://HeartDisease.onrender.com/predict", json=data)
 
         # Get response from backend
-        result = response.json()
+                 # Get response from backend
+        try:
+            result = response.json()
+        except requests.exceptions.JSONDecodeError:
+            st.error(f"Backend returned a non-JSON response (status {response.status_code}). It may be waking up — try again in a few seconds.\n\nRaw: {response.text[:300]}")
+            st.stop()
         print("Result of the predict response", result)
 
         # Check if the backend sent back an error instead of a prediction
@@ -431,7 +436,7 @@ with tab2:
                 result = response.json()
             except requests.exceptions.JSONDecodeError:
                 st.error(f"Backend returned a non-JSON response (status {response.status_code}). It may be waking up — try again in a few seconds.\n\nRaw: {response.text[:300]}")
-            st.stop()
+                st.stop()
             prediction_data = pd.DataFrame(result)
             st.subheader("Predictions:")
             st.write(prediction_data)
