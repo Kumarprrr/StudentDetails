@@ -481,3 +481,4 @@ with tab3:
 
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig, width="stretch")
+
