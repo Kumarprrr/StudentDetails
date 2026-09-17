@@ -427,7 +427,11 @@ with tab2:
         if set(expected_columns).issubset(input_data.columns):
             data = input_data[expected_columns].to_dict(orient="records")
             response = requests.post("https://HeartDisease.onrender.com/predict-bulk", json=data)
-            result = response.json()
+            try:
+                result = response.json()
+            except requests.exceptions.JSONDecodeError:
+                st.error(f"Backend returned a non-JSON response (status {response.status_code}). It may be waking up — try again in a few seconds.\n\nRaw: {response.text[:300]}")
+            st.stop()
             prediction_data = pd.DataFrame(result)
             st.subheader("Predictions:")
             st.write(prediction_data)
