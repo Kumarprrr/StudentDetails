@@ -349,7 +349,7 @@ with tab1:
         data = input_data.iloc[0].to_dict()
 
         # Send data to FastAPI backend
-        response = requests.post("https://HeartDisease.onrender.com/predict", json=data)
+        response = requests.post("https://studentdetails-2-gdiv.onrender.com/predict", json=data)
 
         # Get response from backend
                  # Get response from backend
@@ -431,7 +431,7 @@ with tab2:
 
         if set(expected_columns).issubset(input_data.columns):
             data = input_data[expected_columns].to_dict(orient="records")
-            response = requests.post("https://HeartDisease.onrender.com/predict-bulk", json=data)
+            response = requests.post("https://studentdetails-2-gdiv.onrender.com/predict-bulk", json=data)
             try:
                 result = response.json()
             except requests.exceptions.JSONDecodeError:
