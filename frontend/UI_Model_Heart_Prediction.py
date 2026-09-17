@@ -456,7 +456,7 @@ with tab3:
 
     # Load model accuracies dynamically from the training notebook's output
     import json
-    with open("../model_accuracies.json", "r") as f:
+    with open("model_accuracies.json", "r") as f:
         data = json.load(f)
 
     # Get the model names from the dictionary
